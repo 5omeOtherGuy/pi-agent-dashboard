@@ -1,0 +1,34 @@
+{
+  "updated_on": "2026-09-10",
+  "profiles": {
+    "muse-free": {
+      "provider": "opencode",
+      "model": "muse-spark-1.3-contributor-free",
+      "thinking": "high",
+      "allowed_thinking": ["minimal", "low", "medium", "high", "xhigh"]
+    },
+    "glm-high": {
+      "provider": "opencode-go",
+      "model": "glm-5.3-flash",
+      "thinking": "high",
+      "allowed_thinking": ["high"]
+    },
+    "opus-medium": {
+      "provider": "claude-subscription",
+      "model": "claude-opus-5",
+      "thinking": "medium",
+      "allowed_thinking": ["medium"]
+    },
+    "gemini-restricted": {
+      "provider": "antigravity",
+      "model": "gemini-3.8-flash-high",
+      "thinking": "high",
+      "allowed_thinking": ["high"],
+      "model_by_thinking": {
+        "low": "gemini-3.8-flash-low",
+        "medium": "gemini-3.8-flash-medium",
+        "high": "gemini-3.8-flash-high"
+      }
+    }
+  }
+}
