@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Prepare a checkout for agents: toolchain check, locked dependencies, hooks, credential report.
+# Idempotent; safe to run on every orb start.
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+node -e 'const [a,b]=process.versions.node.split(".").map(Number); if (a<22||(a===22&&b<18)) { console.error(`node ${process.version} is too old; need >=22.18`); process.exit(1); }'
+command -v tmux >/dev/null || echo "setup: tmux not found; the tmux tests will skip" >&2
+
+npm ci --no-audit --no-fund --silent
+
+if [ -d .githooks ]; then git config core.hooksPath .githooks; fi
+
+# Report which credentials are present, never their values.
+if gh auth status >/dev/null 2>&1; then echo "setup: GitHub CLI authenticated"; else echo "setup: GitHub CLI not authenticated"; fi
