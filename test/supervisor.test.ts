@@ -137,7 +137,7 @@ test("a workspace that does not exist yet is created, not fatal", async () => {
 	const prompt = path.join(base, "brief.md");
 	fs.writeFileSync(prompt, "# Task\nCreate the workspace and report back with evidence of it.\n");
 	const cwd = path.join(base, "fresh", "workspace");
-	const env = { ...process.env, PI_ORCH_STATE_DIR: path.join(base, "state"), FAKE_PI_SCENARIO: "ok" };
+	const env = { ...process.env, PI_ORCH_STATE_DIR: path.join(base, "state"), PI_ORCH_PROFILES: path.join(ROOT, "test", "profiles.json"), FAKE_PI_SCENARIO: "ok" };
 	const started = execFileSync(
 		process.execPath,
 		[CLI, "run", "muse-free", "--cwd", cwd, "--run-dir", path.join(base, "run"), "--prompt-file", prompt, "--pi", FAKE, "--timeout", "60", "--detach", "--id", "w_fresh1"],

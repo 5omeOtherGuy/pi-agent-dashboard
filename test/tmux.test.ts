@@ -161,6 +161,7 @@ test("stop --close ends the worker and closes its window", async () => {
 	const env = {
 		...process.env,
 		PI_ORCH_STATE_DIR: path.join(base, "state"),
+		PI_ORCH_PROFILES: PROFILES,
 		PI_ORCH_TMUX_SOCKET: socket,
 		PI_ORCH_WINDOW_ENV: "FAKE_PI_SCENARIO",
 		FAKE_PI_SCENARIO: "steer",
@@ -288,6 +289,7 @@ test("a nested run does not adopt the window of its parent worker", async () => 
 	const env = {
 		...process.env,
 		PI_ORCH_STATE_DIR: path.join(base, "state"),
+		PI_ORCH_PROFILES: PROFILES,
 		PI_ORCH_TMUX_SOCKET: socket,
 		PI_ORCH_WINDOW: "1",
 		TMUX_PANE: outer!.paneId,
@@ -339,7 +341,7 @@ test("a windowed launch fails loudly when the worker cannot start", () => {
 	// a record: the caller must not be told "started".
 	const readOnly = path.join(base, "read-only");
 	fs.mkdirSync(readOnly, { mode: 0o500 });
-	const env = { ...process.env, PI_ORCH_STATE_DIR: path.join(base, "state"), PI_ORCH_TMUX_SOCKET: socket, PI_ORCH_WINDOW_START_TIMEOUT_MS: "1500" };
+	const env = { ...process.env, PI_ORCH_STATE_DIR: path.join(base, "state"), PI_ORCH_PROFILES: PROFILES, PI_ORCH_TMUX_SOCKET: socket, PI_ORCH_WINDOW_START_TIMEOUT_MS: "1500" };
 	fs.mkdirSync(env.PI_ORCH_STATE_DIR, { recursive: true });
 	let failed = false;
 	let stderr = "";
