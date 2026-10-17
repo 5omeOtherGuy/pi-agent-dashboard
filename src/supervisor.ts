@@ -763,11 +763,16 @@ export async function runWorker(options: RunOptions): Promise<RunOutcome> {
 			report.status = "ready";
 			completedNormally = true;
 		} else {
-			await rpc.send("prompt", { message: prompt }, deadline);
+			const promptId = await rpc.send("prompt", { message: prompt }, deadline);
 			const messages: Array<{ role?: string; provider?: string; model?: string; stopReason?: string; content?: unknown; usage?: UsageFields; errorMessage?: string }> = [];
 			for (;;) {
 				const event = await rpc.next(deadline);
 				if (event.type === "agent_settled") break;
+				// Pi 1.x reports what it did with the prompt. "handled" means an extension command or
+				// input handler consumed it and no run starts, so no agent_settled would ever arrive.
+				if (event.type === "response" && event.id === promptId && (event.data as { disposition?: unknown } | undefined)?.disposition === "handled") {
+					throw new RpcError("Pi handled the brief as a command and started no run; rephrase the brief so it does not start with a command");
+				}
 				// The prompt is sent fire-and-forget so an extension that asks for input while
 				// handling it cannot deadlock the supervisor behind a pending response.
 				if (event.type === "response" && event.success === false) {

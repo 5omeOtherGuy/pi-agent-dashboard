@@ -184,8 +184,8 @@ test("selection mismatch stops before the prompt is sent", async () => {
 	}
 });
 
-test("error, empty, fallback, rejection, interactive, post-mismatch, exit and compaction fail", async () => {
-	for (const scenario of ["error", "empty", "fallback", "rejected", "interactive", "post_mismatch", "exit", "compacting"]) {
+test("error, empty, fallback, rejection, handled prompt, interactive, post-mismatch, exit and compaction fail", async () => {
+	for (const scenario of ["error", "empty", "fallback", "rejected", "handled", "interactive", "post_mismatch", "exit", "compacting"]) {
 		const result = await invoke({ scenario });
 		assert.notEqual(result.code, 0, `${scenario}: ${result.stdout}`);
 		assert.equal(result.report.status, "failed", scenario);

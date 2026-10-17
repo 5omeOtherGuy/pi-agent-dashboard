@@ -94,6 +94,10 @@ function handle(line) {
 				return;
 			}
 			if (scenario === "exit") process.exit(7);
+			if (scenario === "handled") {
+				respond({ disposition: "handled" });
+				return;
+			}
 			if (scenario === "rejected") {
 				out({ type: "response", id, command: "prompt", success: false, error: "no credentials" });
 				return;
@@ -103,12 +107,12 @@ function handle(line) {
 				return;
 			}
 			if (scenario === "input_park") {
-				respond({});
+				respond({ disposition: "started" });
 				out({ type: "extension_ui_request", id: "ui7", method: "select", title: "Pick one", options: ["alpha", "beta"] });
 				return;
 			}
 			if (scenario === "steer_rejected" || scenario === "follow_up_rejected") {
-				respond({});
+				respond({ disposition: "started" });
 				hanging = true;
 				out({ type: "agent_start" });
 				// Keep the turn in flight until the expected control calls have been made; the steer
@@ -126,12 +130,12 @@ function handle(line) {
 				return;
 			}
 			if (scenario === "answer_rejected") {
-				respond({});
+				respond({ disposition: "started" });
 				out({ type: "extension_ui_request", id: "ui-rejected", method: "confirm", title: "Allow?" });
 				return;
 			}
 			if (scenario === "hang" || scenario === "steer") {
-				respond({});
+				respond({ disposition: "started" });
 				hanging = true;
 				out({ type: "agent_start" });
 				const tick = setInterval(() => {
@@ -144,7 +148,7 @@ function handle(line) {
 				}, 120);
 				return;
 			}
-			respond({});
+			respond({ disposition: "started" });
 			out({ type: "message_end", message: { role: "user", content: [{ type: "text", text: command.message }] } });
 			if (scenario === "retry") {
 				const failed = assistant("", "error");
@@ -181,7 +185,7 @@ function handle(line) {
 				break;
 			}
 			appendFileSync(`${command.type}.log`, `${String(command.message)}\n`);
-			respond({});
+			respond({ disposition: "queued" });
 			if (command.type === "steer") {
 				out({ type: "message_update", usage: {}, assistantMessageEvent: { type: "text_delta", contentIndex: 0, delta: "steered" } });
 				if (scenario === "steer_rejected" && steerAttempts >= 2) finishTurn("done after recovering from rejected steer");
