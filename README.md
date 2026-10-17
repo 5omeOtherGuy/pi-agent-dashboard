@@ -1,17 +1,22 @@
 # pi-agent-dashboard
 
+Personal project: a dashboard and supervisor for long-lived Pi worker agents, driven from any Pi session or tmux.
+
+Status: prototype. Shared as-is with no support promise and no releases; commands, files and the extension may change without notice.
+
+[![gate](https://github.com/5omeOtherGuy/pi-agent-dashboard/actions/workflows/gate.yml/badge.svg)](https://github.com/5omeOtherGuy/pi-agent-dashboard/actions/workflows/gate.yml)
+[![licence: MIT](https://img.shields.io/badge/licence-MIT-blue.svg)](LICENSE)
+
 `pi-agent-dashboard` runs Pi workers as detached, long-lived processes and lets a human watch
 and steer them from any Pi session or from tmux. It has two parts: `pi-orch`, a CLI that
 supervises one worker per process, and `/agents`, a Pi extension that reads the same state
 directory. The supervisor owns the worker's `pi` process, its deadline and a control socket, so a
 worker outlives the session that started it.
 
-This is a personal project, published as-is. There is no support promise.
-
 ## Requirements
 
 - Node.js >= 22.18; the CLI executes the TypeScript sources directly, with no build step
-- the `pi` CLI on `PATH`
+- the `pi` CLI on `PATH`; last verified with Pi 1.3.0 on 2026-10-17 (the extension loads and `pi-orch check` passes)
 - `tmux` 3.2 or newer, optional; tmux is the intended way to watch workers
 - `git`, used for the workspace revision and diffstat in acceptance evidence
 
@@ -135,6 +140,7 @@ Keys: `↑`/`↓` select, `enter`/`←` detail or back, `s` steer, `f` follow-up
 
 ```bash
 npm ci
+npm run gate                                  # everything CI runs: type check, tests, secret scan, pack check
 npm run check                                 # type check (tsc --noEmit)
 npm test                                      # all tests (node --test)
 node --test test/registry.test.ts             # one test file
@@ -148,3 +154,7 @@ network. The tmux tests use an isolated tmux server and skip when tmux is missin
 
 [architecture](docs/architecture.md) · [tmux](docs/tmux.md) · [config](docs/config.md) ·
 [troubleshooting](docs/troubleshooting.md)
+
+## Licence
+
+MIT, see [LICENSE](LICENSE).
