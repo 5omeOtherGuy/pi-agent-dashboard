@@ -1,5 +1,8 @@
 # Troubleshooting
 
+The commands below assume `pi-orch` is on `PATH` (see [Install](../README.md#install)); from a
+checkout without that step, run `node bin/pi-orch.mjs` instead.
+
 ## "no worker record matches <id>"
 
 The record was removed, or this shell uses a different state directory; finished records are

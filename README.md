@@ -17,18 +17,34 @@ This is a personal project, published as-is. There is no support promise.
 
 ## Install
 
-Install from a checkout; the package is not published to npm yet.
+Install from a checkout; the package is not published to npm yet. Two steps, run in the checkout:
 
-    pi install /absolute/path/to/pi-agent-dashboard
+```bash
+pi install "$PWD"    # registers the /agents extension and the orch_* tools with Pi
+npm link             # puts the pi-orch command on PATH
+```
+
+`pi install` only registers the Pi extension; it does not put `pi-orch` on `PATH`. `npm link`
+links `bin/pi-orch.mjs` into npm's global bin directory, which a standard Node install puts on
+`PATH`. A symlink into any other directory on `PATH` works the same way:
+
+```bash
+ln -s "$PWD/bin/pi-orch.mjs" ~/.local/bin/pi-orch
+```
+
+The bare `pi-orch` commands in this README's tables and in [docs/](docs/) assume this step; without
+it, run `node bin/pi-orch.mjs` from the checkout instead.
 
 ## Quickstart
 
-Commands below run `bin/pi-orch.mjs`, the CLI entry point; `pi-orch` is the same file on `PATH`.
+Commands below run `bin/pi-orch.mjs` from the checkout, so they work before the `PATH` step;
+once `pi-orch` is linked, `pi-orch doctor` and `node bin/pi-orch.mjs doctor` are the same.
 
-1. Install the package.
+1. Install the package and link the CLI.
 ```bash
 cd /path/to/pi-agent-dashboard
 pi install "$PWD"
+npm link
 ```
 
 2. Print the toolchain, state directory and roster discovery result.
@@ -45,8 +61,9 @@ printf '{"profilesPath":"%s/profiles.json"}\n' "$state" > "$state/config.json"
 node bin/pi-orch.mjs profiles
 ```
 
-4. Verify the profile without inference.
+4. Verify the profile without inference. `check` needs an existing workspace; `run` creates one.
 ```bash
+mkdir -p /tmp/pi-orch-demo/work
 node bin/pi-orch.mjs check demo --cwd /tmp/pi-orch-demo/work --run-dir /tmp/pi-orch-demo/probe-01
 ```
 
@@ -113,6 +130,19 @@ Keys: `↑`/`↓` select, `enter`/`←` detail or back, `s` steer, `f` follow-up
 - The deadline is wall-clock, 900 seconds by default, enforced during prompt transport and while waiting for input.
 - Dashboards read the state directory only; no process is attached to the session that started the worker.
 - `--detach` returns immediately, `--window` hosts the supervisor in a tmux window, and both publish the same record.
+
+## Development
+
+```bash
+npm ci
+npm run check                                 # type check (tsc --noEmit)
+npm test                                      # all tests (node --test)
+node --test test/registry.test.ts             # one test file
+node --test --test-name-pattern="stale" test/control.test.ts    # matching tests only
+```
+
+The tests drive the real CLI against `test/fake-pi.mjs`; they need no Pi install, credentials or
+network. The tmux tests use an isolated tmux server and skip when tmux is missing.
 
 ## Docs
 
