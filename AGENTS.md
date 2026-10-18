@@ -1,10 +1,11 @@
 ## Profile
 - Purpose: `pi-orch`, a supervisor CLI for long-lived Pi worker agents, plus `/agents`, a Pi extension that watches and steers them
-- Stage: prototype (repository standard 2026-10-17)
+- Stage: prototype (repository standard 2026-10-18)
 - Gate: `npm run gate` (CI job `gate`)
 - Landing: direct to main after a green gate; agents land: yes
 - Release: none; agents release: no
 - Outside issues and PRs: agents triage; outside PRs merge: owner approves
+- Sensitive paths: `AGENTS.md`, `.agents/`, `.github/workflows/`, `package.json` (install manifest, `bin`, `files`, gate script), `.secretlintrc.json`, `src/control.ts`, `src/registry.ts` and `src/admission.ts` (socket and state-directory permissions), `src/supervisor.ts` (worker launch: tool, trust and environment handling), `src/extension/tools.ts` (supervisor launch, private brief and log files), `src/protocol.ts` (wire and on-disk formats), `bin/pi-orch.mjs`, `src/cli.ts`, `extensions/`, `src/extension/index.ts` (CLI, extension and `orch_*` tool interfaces)
 
 ## Map
 
@@ -20,6 +21,8 @@
 
 1. Small commits straight to `main`, Conventional Commits subjects.
 2. Run `npm run gate` and push when it passes; push at the end of every session.
+   A change to a sensitive path (profile above) first gets an independent review of the diff
+   (another agent or the owner), with its verdict recorded in the commit body.
 3. Risky ideas go on `spike/<slug>` branches; merge them, or tag `archive/<slug>` and delete them.
 
 ## Rules
