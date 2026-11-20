@@ -1,8 +1,10 @@
+Archived 2026-11-20: this repository is retired. Source, branches, tags and existing releases are retained for reference.
+
 # pi-agent-dashboard
 
 Personal project: a dashboard and supervisor for long-lived Pi worker agents, driven from any Pi session or tmux.
 
-Status: prototype. Shared as-is with no support promise and no releases; commands, files and the extension may change without notice.
+Status: archived. Retained for reference; no further development is planned.
 
 [![gate](https://github.com/5omeOtherGuy/pi-agent-dashboard/actions/workflows/gate.yml/badge.svg)](https://github.com/5omeOtherGuy/pi-agent-dashboard/actions/workflows/gate.yml)
 [![licence: MIT](https://img.shields.io/badge/licence-MIT-blue.svg)](LICENSE)
