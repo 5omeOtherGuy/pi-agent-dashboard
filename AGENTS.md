@@ -1,6 +1,6 @@
 ## Profile
 - Purpose: `pi-orch`, a supervisor CLI for long-lived Pi worker agents, plus `/agents`, a Pi extension that watches and steers them
-- Stage: prototype (repository standard 2026-10-18)
+- Stage: archived (repository standard)
 - Gate: `npm run gate` (CI job `gate`)
 - Landing: direct to main after a green gate; agents land: yes
 - Release: none; agents release: no
